@@ -1,61 +1,194 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Junior Developer Test Task: Contact Management API
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+This is a simple contact management API built with Laravel 12 as part of a junior developer test task. The API allows for basic CRUD operations on contacts and includes a search functionality.
 
-## About Laravel
+## Features
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+-   Create, Retrieve, Update, and Delete contacts.
+-   List all contacts with pagination.
+-   Search for contacts by first name, last name, email, or company.
+-   Request validation for all input.
+-   Standardized JSON responses using API Resources.
+-   A full feature test suite using PHPUnit.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Technical Stack
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+-   Laravel 12
+-   PHP 8.4+
+-   MySQL (can be swapped for PostgreSQL)
+-   SQLite for automated testing
 
-## Learning Laravel
+---
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Setup Instructions
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+Follow these steps to get the project up and running locally.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### 1. Clone the Repository
 
-## Laravel Sponsors
+```bash
+git clone https://github.com/abdiu34567/contact-api.git
+cd contact-api
+```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### 2. Install Dependencies
 
-### Premium Partners
+```bash
+composer install
+```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### 3. Environment Configuration
 
-## Contributing
+Copy the example environment file and generate the application key.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+cp .env.example .env
+php artisan key:generate
+```
 
-## Code of Conduct
+### 4. Database Setup
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Create a MySQL database for the application (e.g., `contact_api`). Then, open the `.env` file and update the database connection details:
 
-## Security Vulnerabilities
+```dotenv
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=contact_api
+DB_USERNAME=your_db_username
+DB_PASSWORD=your_db_password
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### 5. Run Migrations
 
-## License
+Run the database migrations to create the necessary tables.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```bash
+php artisan migrate
+```
+
+### 6. Run the Development Server
+
+```bash
+php artisan serve
+```
+
+The API will be available at `http://127.0.0.1:8000`.
+
+### 7. Run Tests (Optional)
+
+To run the full feature test suite, make sure you have the `pdo_sqlite` PHP extension enabled. Then run:
+
+```bash
+php artisan test
+```
+
+---
+
+## API Endpoint Documentation
+
+**Base URL:** `http://127.0.0.1:8000/api`
+
+Headers for all requests:
+
+-   `Accept: application/json`
+-   `Content-Type: application/json` (for POST/PUT)
+
+---
+
+### 1. List All Contacts
+
+-   **Endpoint:** `GET /contacts`
+-   **Description:** Retrieves a paginated list of all contacts.
+-   **Success Response (200 OK):**
+    ```json
+    {
+        "data": [
+            {
+                "id": 1,
+                "first_name": "John",
+                "last_name": "Doe",
+                "email": "john@example.com",
+                "phone": "+1234567890",
+                "company": "Tech Corp",
+                "birthday": "1990-01-01",
+                "created_at": "2025-09-20T14:30:00Z",
+                "updated_at": "2025-09-20T14:30:00Z"
+            }
+        ],
+        "links": { ... },
+        "meta": { ... }
+    }
+    ```
+
+---
+
+### 2. Create a New Contact
+
+-   **Endpoint:** `POST /contacts`
+-   **Description:** Creates a new contact.
+-   **Request Body:**
+    ```json
+    {
+        "first_name": "Jane",
+        "last_name": "Smith",
+        "email": "jane@example.com",
+        "phone": "+1987654321",
+        "company": "Web Solutions",
+        "birthday": "1992-05-15"
+    }
+    ```
+-   **Success Response (201 Created):**
+    ```json
+    {
+        "data": {
+            "id": 2,
+            "first_name": "Jane",
+            "last_name": "Smith",
+            ...
+        }
+    }
+    ```
+
+---
+
+### 3. Get a Single Contact
+
+-   **Endpoint:** `GET /contacts/{id}`
+-   **Description:** Retrieves the details of a specific contact.
+-   **Success Response (200 OK):** (Same structure as create success response)
+
+---
+
+### 4. Update a Contact
+
+-   **Endpoint:** `PUT /contacts/{id}`
+-   **Description:** Updates an existing contact's details.
+-   **Request Body:** (Include all required fields)
+    ```json
+    {
+        "first_name": "Jane",
+        "last_name": "Smith-Jones",
+        "email": "jane.sj@example.com",
+        "phone": "+1987654321"
+    }
+    ```
+-   **Success Response (200 OK):** (Same structure as create success response, with updated data)
+
+---
+
+### 5. Delete a Contact
+
+-   **Endpoint:** `DELETE /contacts/{id}`
+-   **Description:** Deletes a specific contact.
+-   **Success Response (204 No Content):** (Empty response body)
+
+---
+
+### 6. Search Contacts
+
+-   **Endpoint:** `GET /contacts/search`
+-   **Description:** Searches for contacts by name, email, or company.
+-   **Query Parameter:** `query`
+-   **Example URL:** `/contacts/search?query=jane`
+-   **Success Response (200 OK):** (Same structure as list all contacts response)
